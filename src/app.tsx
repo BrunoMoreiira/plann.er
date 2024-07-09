@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { MapPin, Calendar, ArrowRight, UserRoundPlus, Settings2, X } from "lucide-react";
+import { MapPin, Calendar, ArrowRight, UserRoundPlus, Settings2, X, AtSign, Plus } from "lucide-react";
 
 export function App() {
   const [isGuestInputOpen, setIsGuestInputOpen] = useState(false);
@@ -13,6 +13,7 @@ export function App() {
     'hellen_graham@yahoo.com',
     'kole.schiller27@yahoo.com'
   ]);
+  const [newGuestEmail, setNewGuestEmail] = useState('');
 
   function openGuestInput() {
     setIsGuestInputOpen(true);
@@ -32,6 +33,15 @@ export function App() {
 
   function removeGuest(email: string) {
     setGuestEmails(guestEmails.filter(guestEmail => guestEmail !== email));
+  }
+
+  function handleAddGuest(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (newGuestEmail.trim() && !guestEmails.includes(newGuestEmail.trim())) {
+      setGuestEmails([...guestEmails, newGuestEmail.trim()]);
+      setNewGuestEmail('');
+    }
+    event.currentTarget.reset()
   }
 
   return (
@@ -135,16 +145,25 @@ export function App() {
                   </div>
                 ))}
               </div>
-              <div className='pt-2'>
-                <input
-                  type='email'
-                  placeholder='Digite o e-mail do convidado'
-                  className='bg-zinc-800 text-zinc-300 p-2 rounded-md w-full outline-none'
-                />
-                <button className='bg-lime-300 text-lime-950 mt-2 px-5 py-2 font-medium rounded-md hover:bg-lime-400'>
-                  Convidar
+
+              <div className='w-full h-px bg-zinc-800'></div>
+
+              <form onSubmit={handleAddGuest} className='p-2.5 bg-zinc-950 border-zinc-800 rounded-lg flex items-center gap-2'>
+                <div className='px-2 flex items-center flex-1 gap-2'>
+                  <AtSign className='size-5 text-zinc-400' />
+                  <input
+                  type="email"
+                  value={newGuestEmail}
+                  onChange={(e) => setNewGuestEmail(e.target.value)}
+                  placeholder="Digite o e-mail do convidado"
+                  className="bg-transparent text-lg placeholder-zinc-400 outline-none flex-1"
+                  />
+                </div>
+                <button type="submit" className="bg-lime-300 text-lime-950 px-5 py-2 font-medium flex items-center gap-2 rounded-md hover:bg-lime-400">
+                Convidar
+                <Plus className="size-5" />
                 </button>
-              </div>
+              </form>
             </div>
           </div>
         )}      
